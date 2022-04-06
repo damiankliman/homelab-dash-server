@@ -30,7 +30,7 @@ router.post("/new", (req, res) => {
   if (!server.title) {
     res.send({ error: "server must have a title" });
   } else {
-    serversDb.data.servers.push({ id: nanoid(), ...server });
+    serversDb.data.servers.push({ ...server, id: nanoid() });
     serversDb
       .write()
       .then(() => {
