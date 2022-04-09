@@ -28,7 +28,7 @@ router.get("/", (req, res) => {
 router.post("/new", (req, res) => {
   const server = req.body;
   if (!server.title) {
-    res.send({ error: "server must have a title" });
+    res.status(400).send({ message: "Server must have a name" });
   } else {
     serversDb.data.servers.push({ ...server, id: nanoid() });
     serversDb
@@ -49,7 +49,7 @@ router.delete("/delete", (req, res) => {
   const toDelete = req.body.id;
   const servers = serversDb.data.servers;
   if (!toDelete) {
-    res.send({ error: "server id missing" });
+    res.status(400).send({ message: "Server id missing" });
   } else {
     serversDb.data.servers = servers.filter((server) => server.id !== toDelete);
     serversDb
@@ -69,8 +69,10 @@ router.delete("/delete", (req, res) => {
 router.put("/edit", (req, res) => {
   const toEdit = req.body;
   const servers = serversDb.data.servers;
-  if (!toEdit.id || !toEdit.title) {
-    res.send({ error: "server id or title missing" });
+  if (!toEdit.id) {
+    res.status(400).send({ message: "Server ID missing" });
+  } else if (!toEdit.title) {
+    res.status(400).send({ message: "Server must have a name" });
   } else {
     const serverIndex = servers.findIndex(
       (oldServer) => oldServer.id === toEdit.id
