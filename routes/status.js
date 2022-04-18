@@ -12,22 +12,25 @@ serversDb.read();
 //GET SERVER STATUS
 router.get("/", checkServerStatus, (req, res) => {
   res.send(req.status);
+  console.log("Server status sent to client");
 });
 
 async function checkServerStatus(req, res, next) {
-  const servers = serversDb.data.servers;
-  let status = [];
-  await Promise.all(
-    servers.map(async (server) => {
-      status.push({
-        id: server.id,
-        status: await isPortReachable(server.pingPort, {
-          host: server.pingAddress,
-        }),
-      });
-    })
-  );
-  req.status = status;
+  await serversDb.read().then(async () => {
+    const servers = serversDb.data.servers;
+    let status = [];
+    await Promise.all(
+      servers.map(async (server) => {
+        status.push({
+          id: server.id,
+          status: await isPortReachable(server.pingPort, {
+            host: server.pingAddress,
+          }),
+        });
+      })
+    );
+    req.status = status;
+  });
   next();
 }
 
