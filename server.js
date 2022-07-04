@@ -21,7 +21,7 @@ app.use("/api/servers", serversRouter);
 app.use("/api/status", statusRouter);
 
 app.get("*", (req, res) => {
-  res.sendFile(path.join(__dirname, "app/build", "index.html"));
+  res.sendFile(path.join(__dirname, "app/homelab-dash/build", "index.html"));
 });
 
 app.listen(PORT, () => console.log(`Server running on port: ${PORT}`));
