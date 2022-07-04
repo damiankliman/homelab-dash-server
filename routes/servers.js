@@ -16,7 +16,6 @@ router.get("/", (req, res) => {
     .read()
     .then(() => {
       res.json(serversDb.data.servers);
-      console.log("servers list sent");
     })
     .catch((err) => {
       console.log(`ERROR: ${err}`);
@@ -35,11 +34,9 @@ router.post("/new", (req, res) => {
       .write()
       .then(() => {
         res.json(serversDb.data.servers);
-        console.log("new server written to database");
       })
       .catch((err) => {
         res.send(err.message);
-        console.log(`ERROR: ${err}`);
       });
   }
 });
@@ -56,7 +53,6 @@ router.delete("/delete", (req, res) => {
       .write()
       .then(() => {
         res.json(serversDb.data.servers);
-        console.log("Deleted server and sent new list to client");
       })
       .catch((err) => {
         res.send(err.message);
@@ -74,15 +70,12 @@ router.put("/edit", (req, res) => {
   } else if (!toEdit.title) {
     res.status(400).send({ message: "Server must have a name" });
   } else {
-    const serverIndex = servers.findIndex(
-      (oldServer) => oldServer.id === toEdit.id
-    );
+    const serverIndex = servers.findIndex((oldServer) => oldServer.id === toEdit.id);
     serversDb.data.servers[serverIndex] = toEdit;
     serversDb
       .write()
       .then(() => {
         res.json(serversDb.data.servers);
-        console.log(`Made edit to server list with id: ${toEdit.id}`);
       })
       .catch((err) => {
         res.send(err.message);

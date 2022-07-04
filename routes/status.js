@@ -12,7 +12,6 @@ serversDb.read();
 //GET SERVER STATUS
 router.get("/", checkServerStatus, (req, res) => {
   res.send(req.status);
-  console.log("Server status sent to client");
 });
 
 async function checkServerStatus(req, res, next) {
